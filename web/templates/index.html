@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ .title }}</title>
+  <link rel="stylesheet" href="/static/notes.css">
+</head>
+<body>
+  <main class="app-frame">
+    <aside class="notes-sidebar">
+      <div class="notes-brand">
+        <div class="notes-brand-title">Quick Notes</div>
+      </div>
+
+      <nav class="notes-nav" id="sidebarNav">
+        <button class="notes-nav-item active" type="button" data-view="notes">Notes</button>
+        <button class="notes-nav-item" type="button" data-view="reminders">Reminders</button>
+
+        <div class="notes-group-title">
+          <span>LABELS</span>
+          <button type="button">EDIT</button>
+        </div>
+
+        <button class="notes-nav-item" type="button" data-view="home">Home</button>
+        <button class="notes-nav-item" type="button" data-view="work">Work</button>
+        <button class="notes-nav-item" type="button" data-view="company">Company</button>
+        <button class="notes-nav-item create-label" type="button" data-view="create-label">Create new label</button>
+
+        <div class="notes-divider"></div>
+
+        <button class="notes-nav-item" type="button" data-view="archive">Archive</button>
+        <button class="notes-nav-item" type="button" data-view="trash">Trash</button>
+        <button class="notes-nav-item" type="button" data-view="backup">Backup</button>
+        <button class="notes-nav-item" type="button" data-view="settings">Settings</button>
+      </nav>
+
+      <section class="notes-mini-card">
+        <div class="section-head compact-head">
+          <h2>Session</h2>
+          <span id="authBadge" class="status status-warn">guest</span>
+        </div>
+        <form id="authForm" class="stack compact-stack">
+          <div class="segmented">
+            <button type="button" class="segmented-btn active" data-mode="login">Вход</button>
+            <button type="button" class="segmented-btn" data-mode="register">Регистрация</button>
+          </div>
+          <label class="field">
+            <span>Имя</span>
+            <input name="name" type="text" placeholder="Алексей" autocomplete="name">
+          </label>
+          <label class="field">
+            <span>Email</span>
+            <input name="email" type="email" placeholder="alex@example.com" autocomplete="email">
+          </label>
+          <label class="field">
+            <span>Пароль</span>
+            <input name="password" type="password" placeholder="••••••••" autocomplete="current-password">
+          </label>
+          <button class="button button-primary" type="submit" id="authSubmit">Войти</button>
+          <p class="hint" id="authHint">Токен сохраняется в браузере и используется для favorites.</p>
+        </form>
+        <button class="button button-ghost sidebar-action" id="logoutBtn" type="button">Выйти</button>
+      </section>
+    </aside>
+
+      <section class="workspace">
+      <section id="authGate" class="auth-gate">
+        <div class="auth-gate-card">
+          <p class="eyebrow hero-kicker">Access required</p>
+          <h1>Сначала авторизуйтесь или зарегистрируйтесь</h1>
+          <p>После входа появится весь интерфейс. До этого доступны только меню и форма доступа слева.</p>
+        </div>
+      </section>
+
+      <header class="workspace-hero dashboard-shell">
+        <div>
+          <p class="eyebrow hero-kicker">Bookstore Studio</p>
+          <h1>Управление книгами</h1>
+          <p class="lead">Интерфейс с логикой магазина, но в визуальном стиле быстрого списка и бокового меню.</p>
+        </div>
+        <div class="workspace-badges">
+          <span class="pill">Gin</span>
+          <span class="pill">GORM</span>
+          <span class="pill">JWT</span>
+          <span class="pill">PostgreSQL</span>
+        </div>
+      </header>
+
+      <section class="workspace-grid dashboard-shell">
+        <div class="view-switcher">
+          <span class="view-chip active" data-view-chip="home">Home</span>
+          <span class="view-chip" data-view-chip="notes">Notes</span>
+          <span class="view-chip" data-view-chip="work">Work</span>
+          <span class="view-chip" data-view-chip="company">Company</span>
+        </div>
+        <article class="panel-card soft-card">
+          <div class="section-head compact-head">
+            <h2>Статус</h2>
+            <span class="status status-ok">live</span>
+          </div>
+          <div class="stats-grid notes-stats">
+            <div><strong id="booksCount">0</strong><span>книг</span></div>
+            <div><strong id="authorsCount">0</strong><span>авторов</span></div>
+            <div><strong id="categoriesCount">0</strong><span>категорий</span></div>
+            <div><strong id="favoritesCount">0</strong><span>избранных</span></div>
+          </div>
+        </article>
+
+        <article class="panel-card soft-card">
+          <div class="section-head compact-head">
+            <h2>Быстрые формы</h2>
+            <span class="status status-info">create</span>
+          </div>
+
+          <form id="authorForm" class="mini-form">
+            <label class="field compact">
+              <span>Автор</span>
+              <input name="name" type="text" placeholder="Новый автор">
+            </label>
+            <button class="button button-secondary" type="submit">Добавить автора</button>
+          </form>
+
+          <form id="categoryForm" class="mini-form">
+            <label class="field compact">
+              <span>Категория</span>
+              <input name="name" type="text" placeholder="Fiction">
+            </label>
+            <button class="button button-secondary" type="submit">Добавить категорию</button>
+          </form>
+        </article>
+      </section>
+
+      <section class="panel-card soft-card dashboard-shell">
+        <div class="section-head compact-head">
+          <h2>Каталог книг</h2>
+          <span id="bookMeta" class="status">ready</span>
+        </div>
+
+        <form id="filterForm" class="filters-grid notes-filters">
+          <label class="field compact">
+            <span>Поиск</span>
+            <input name="title" type="text" placeholder="Название книги">
+          </label>
+          <label class="field compact">
+            <span>Автор</span>
+            <select name="author"></select>
+          </label>
+          <label class="field compact">
+            <span>Категория</span>
+            <select name="category"></select>
+          </label>
+          <label class="field compact">
+            <span>Цена от</span>
+            <input name="min_price" type="number" step="0.01" min="0" placeholder="0">
+          </label>
+          <label class="field compact">
+            <span>Цена до</span>
+            <input name="max_price" type="number" step="0.01" min="0" placeholder="999">
+          </label>
+          <div class="filter-actions">
+            <button class="button button-primary" type="submit">Применить</button>
+            <button class="button button-ghost" type="button" id="resetFilters">Сброс</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="workspace-grid two-up dashboard-shell">
+        <article class="panel-card soft-card">
+          <div class="section-head compact-head">
+            <h2>Книга</h2>
+            <span id="bookFormMode" class="status status-info">create</span>
+          </div>
+          <form id="bookForm" class="stack">
+            <input type="hidden" name="id">
+            <label class="field">
+              <span>Название</span>
+              <input name="title" type="text" placeholder="Название книги">
+            </label>
+            <label class="field">
+              <span>Автор</span>
+              <select name="author_id"></select>
+            </label>
+            <label class="field">
+              <span>Категория</span>
+              <select name="category_id"></select>
+            </label>
+            <label class="field">
+              <span>Цена</span>
+              <input name="price" type="number" step="0.01" min="0.01" placeholder="19.99">
+            </label>
+            <div class="inline-actions">
+              <button class="button button-primary" type="submit">Сохранить</button>
+              <button class="button button-ghost" type="button" id="clearBookForm">Очистить</button>
+            </div>
+          </form>
+        </article>
+
+        <article class="panel-card soft-card" data-panel="favorites">
+          <div class="section-head compact-head">
+            <h2>Избранное</h2>
+            <span class="status status-ok">private</span>
+          </div>
+          <div id="favoritesList" class="card-list"></div>
+        </article>
+      </section>
+
+      <section class="panel-card soft-card dashboard-shell" data-panel="books-list">
+        <div class="section-head compact-head">
+          <h2>Список книг</h2>
+          <div class="inline-actions">
+            <button class="button button-ghost" type="button" id="prevPage">Назад</button>
+            <span id="pageInfo" class="status">page 1</span>
+            <button class="button button-ghost" type="button" id="nextPage">Вперед</button>
+          </div>
+        </div>
+        <div id="booksList" class="card-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <script src="/static/js/state.js"></script>
+  <script src="/static/js/http.js"></script>
+  <script src="/static/js/render.js"></script>
+  <script src="/static/js/services.js"></script>
+  <script src="/static/js/handlers.js"></script>
+  <script src="/static/js/main.js"></script>
+</body>
+</html>
